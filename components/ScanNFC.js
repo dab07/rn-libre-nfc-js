@@ -1,13 +1,13 @@
 import React from "react";
 import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
-import Nfcmanager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
+import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
 
 const ScanNFC = () => {
     async function scanTag() {
-        Nfcmanager.setEventListener(NfcEvents.DiscoverTag,  tag => {
+        NfcManager.setEventListener(NfcEvents.DiscoverTag,  tag => {
             console.warn('Tag Found', tag)
         })
-        await Nfcmanager.registerTagEvent();
+        await NfcManager.registerTagEvent();
     }
 
     // async function scanTag() {
@@ -15,12 +15,14 @@ const ScanNFC = () => {
     //         await Nfcmanager.requestTechnology(NfcTech.Ndef);
     //         const tag = Nfcmanager.getTag();
     //         console.warn('Tag Found', tag);
+    //         console.log('Scanning');
     //     }
     //     catch (e) {
     //         console.warn('Something went wrong!');
     //     }
     //     finally {
-    //         Nfc.cancelTechnologyRequest();
+    //         Nfcmanager.cancelTechnologyRequest();
+    //         console.log('Scanning end');
     //     }
     // }
 

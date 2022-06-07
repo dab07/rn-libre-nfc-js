@@ -1,41 +1,56 @@
-import React, {useState} from "react";
-import {Text, View, StyleSheet} from "react-native";
-import Nfcmanager from 'react-native-nfc-manager';
-import ScanNFC from "../components/ScanNFC";
+import React, {useState} from 'react';
+import Header from "./components/Header";
+import Listitem from "./components/ListItem";
+import AddItem from "./components/AddItem";
+
+
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    FlatList,
+} from 'react-native';
 
 const App = () => {
-    const [hasNfc, setHasNfc] = useState();
 
-    React.useEffect(() => {
-        async function checkNFC() {
-            const supportedNFC  = await Nfcmanager.isSupported();
-            if (supportedNFC) {
-                await Nfcmanager.start();
-            }
-            setHasNfc(supportedNFC);
-        }
-        checkNFC();
-    }, [])
-    if (hasNfc == null) {
-        return null;
+    const [items, setItems] = useState([
+        {id: 1, text : 'i1'},
+        {id: 2, text : 'i2'},
+        {id: 3, text : 'i3'},
+    ]);
+
+    const handleDeleteItem = (id) => {
+        setItems(prevItem => prevItem.filter(item => item.id != id));
     }
-    else if (!hasNfc){
-        return (
-        <View>
-            <Text style={styles.txt}> Device doesn't support NFC </Text>
-        </View>
-        );
+    const handleAddItem = (text) => {
+        if (text)
+            setItems(prevItem => [ ...prevItem, {id : prevItem.length + 1, text } ]);
     }
 
     return (
-        <ScanNFC/>
-    );
-}
+        <View style = {styles.ViewStyle}>
+            <Header title={"My List"}/>
+            <AddItem handleAddItem={handleAddItem} />
+            <FlatList
+                data = {items}
+                renderItem = {({item}) =>
+                    <Listitem item={item} handleDeleteItem={handleDeleteItem} />
+                }
+            />
 
-const styles = StyleSheet.create({
-    txt : {
-        textAlign: 'center',
-        paddingTop: 90,
+        </View>
+    )
+};
+
+const styles = StyleSheet.create ({
+    ViewStyle: {
+        flex: 1,
+        paddingTop : 37,
+    },
+    texts : {
+        color : 'black',
     }
+
 });
 export default App;
